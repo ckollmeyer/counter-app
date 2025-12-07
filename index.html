@@ -1,43 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Counter</title>
+<title>Daily Counter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
-    font-family: sans-serif;
+    font-family: 'Arial', sans-serif;
     text-align: center;
+    background-color: #f0f4f8;
     padding: 20px;
+  }
+  h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+    color: #1a73e8;
+  }
+  h2 {
+    font-size: 30px;
+    margin: 15px 0 5px 0;
+    color: #333;
   }
   .count {
     font-size: 40px;
-    margin: 20px 0;
+    margin-bottom: 10px;
+    color: #444;
   }
   .btn {
-    font-size: 30px;
+    font-size: 28px;
     padding: 20px;
     width: 80%;
     margin: 10px auto;
     display: block;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    transform: scale(1.05);
+  }
+  .btn-under { background-color: #ff9999; color: white; }
+  .btn-jr { background-color: #99ccff; color: white; }
+  .btn-over { background-color: #99ff99; color: white; }
+  .btn-extra1 { background-color: #ffcc66; color: white; }
+  .btn-extra2 { background-color: #cc99ff; color: white; }
+  .btn-extra3 { background-color: #ff66cc; color: white; }
+  hr {
+    margin: 30px 0;
+    border: 1px solid #ccc;
   }
 </style>
 </head>
 <body>
 
-<h1>Category Counter</h1>
+<h1>Daily Counter</h1>
+<p>Track your categories easily and upload to Google Sheets</p>
 
-<div class="count">Under: <span id="under">0</span></div>
-<button class="btn" onclick="inc('under')">Under +1</button>
+<h2>Under</h2>
+<div class="count" id="under">0</div>
+<button class="btn btn-under" onclick="inc('under')">Under +1</button>
 
-<div class="count">Just Right: <span id="jr">0</span></div>
-<button class="btn" onclick="inc('jr')">Just Right +1</button>
+<h2>Just Right</h2>
+<div class="count" id="jr">0</div>
+<button class="btn btn-jr" onclick="inc('jr')">Just Right +1</button>
 
-<div class="count">Over: <span id="over">0</span></div>
-<button class="btn" onclick="inc('over')">Over +1</button>
+<h2>Over</h2>
+<div class="count" id="over">0</div>
+<button class="btn btn-over" onclick="inc('over')">Over +1</button>
 
 <hr>
 
-<button class="btn" onclick="upload()">Upload to Google Sheets</button>
+<h2>Extra Buttons</h2>
+<button class="btn btn-extra1" onclick="extra1()">Extra Button 1</button>
+<button class="btn btn-extra2" onclick="extra2()">Extra Button 2</button>
+<button class="btn btn-extra3" onclick="extra3()">Extra Button 3</button>
+
+<hr>
+
+<button class="btn btn-jr" onclick="upload()">Upload to Google Sheets</button>
 
 <script>
 let under = 0;
@@ -54,16 +94,17 @@ function inc(which) {
   document.getElementById("over").innerText = over;
 }
 
+// Placeholder functions for your extra buttons
+function extra1() { alert("Extra Button 1 clicked"); }
+function extra2() { alert("Extra Button 2 clicked"); }
+function extra3() { alert("Extra Button 3 clicked"); }
+
 function upload() {
-  fetch("https://script.google.com/macros/s/AKfycby4c2RGAQeJgMnvEDW2PXgTC_gBgp8gVpA-hVYzhM83POruWTDhGoOU_ZgQCNtw-qVXHg/exec", {
+  fetch("YOUR_GOOGLE_SCRIPT_URL_HERE", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      under: under,
-      jr: jr,
-      over: over
-    })
-  }).then(() => alert("Uploaded!"));
+    body: JSON.stringify({ under: under, jr: jr, over: over })
+  }).then(() => alert("Uploaded to Google Sheets!"));
 }
 </script>
 
