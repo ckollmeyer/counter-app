@@ -62,7 +62,7 @@
       border-radius: 15px;
       border: none;
       cursor: pointer;
-      width: 440px; /* width = blue + green combined */
+      width: 440px; /* blue + green combined */
       display: block;
       margin: 0 auto 15px auto;
       text-align: center;
@@ -141,15 +141,15 @@
   }
 
   function upload(){
-    // Replace with your Google Form pre-filled URL IDs
     const formUrl="https://docs.google.com/forms/d/e/1FAIpQLSfd4DmpsOQr-1N9411Ya9a49G2BAWdZuEAD8pVjo0RvN_aLww/formResponse";
     const data=new URLSearchParams();
 
+    // Map counters to the correct entry IDs
     data.append("entry.900320374", cupUnder);   // Cup Under
     data.append("entry.677037870", cupWithin);  // Cup Within
     data.append("entry.592558042", cupOver);    // Cup Over
-    data.append("entry.3134040", coneUnder);  // Cone Under
-    data.append("entry.36772903", coneWithin); // Cone Within
+    data.append("entry.3134040", coneUnder);    // Cone Under
+    data.append("entry.36772903", coneWithin);  // Cone Within
     data.append("entry.989635515", coneOver);   // Cone Over
 
     fetch(formUrl, { method:"POST", mode:"no-cors", body:data })
