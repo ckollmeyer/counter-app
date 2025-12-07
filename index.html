@@ -133,7 +133,7 @@
 
   // Upload counters to Google Sheets and reset
   function upload() {
-    fetch("YOUR_GOOGLE_SCRIPT_URL_HERE", {
+    fetch("https://script.google.com/macros/s/AKfycby4c2RGAQeJgMnvEDW2PXgTC_gBgp8gVpA-hVYzhM83POruWTDhGoOU_ZgQCNtw-qVXHg/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
