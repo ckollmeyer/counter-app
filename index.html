@@ -28,18 +28,23 @@
       justify-content: center;
       gap: 15px;
       margin-bottom: 30px;
+      max-width: 550px; /* row width to align upload button */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .btn {
       font-size: 24px;
       padding: 20px;
       flex: 1;
-      max-width: 150px;
+      min-width: 160px;   /* wider minimum width for one-line text */
+      max-width: 180px;
       border: none;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
       color: white;
+      white-space: nowrap; /* prevents wrapping */
     }
 
     .btn:hover {
@@ -53,13 +58,15 @@
     #uploadBtn {
       font-size: 28px;
       padding: 20px;
-      width: 80%;
-      margin-top: 30px;
       border-radius: 15px;
       background-color: #1a73e8;
       color: white;
       border: none;
       cursor: pointer;
+      width: 100%; /* match the button row */
+      max-width: 550px; /* same as button-row */
+      display: block;
+      margin: 0 auto 30px auto; /* centered under button rows */
     }
 
     #uploadBtn:hover {
