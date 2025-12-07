@@ -18,31 +18,29 @@
       font-size: 50px;
       color: #1a73e8;
       margin-bottom: 10px;
-      text-align: center;
     }
 
     h2 {
       font-size: 30px;
       color: #333;
       margin: 20px 0 15px 0;
-      text-align: center;
     }
 
     .button-row {
       display: flex;
       justify-content: center;
-      gap: 20px; /* spacing between buttons */
-      margin-bottom: 35px; /* spacing between rows */
+      gap: 20px;
+      margin-bottom: 35px;
       width: 100%;
       max-width: 550px;
     }
 
     .btn {
       font-size: 24px;
-      padding: 30px 20px; /* taller buttons */
+      padding: 30px 20px;
       flex: 1;
       min-width: 160px;
-      max-width: 220px; /* wide enough for blue button */
+      max-width: 220px;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -59,27 +57,41 @@
     .under { background-color: #ff9999; }
     .within { 
       background-color: #99ccff; 
-      min-width: 200px; /* blue button wider */
+      min-width: 200px;
       max-width: 220px;
     }
     .over { background-color: #99ff99; }
 
-    /* Upload button spans blue + green buttons combined */
+    /* Undo button width = combined width of blue + green buttons */
+    #undoBtn {
+      font-size: 28px;
+      padding: 20px 20px;
+      border-radius: 15px;
+      background-color: #ff6f61; /* red-ish for undo */
+      color: white;
+      border: none;
+      cursor: pointer;
+      width: 440px;
+      display: block;
+      margin: 0 auto 15px auto;
+      text-align: center;
+    }
+
     #uploadBtn {
       font-size: 28px;
-      padding: 20px 20px;       /* original height */
+      padding: 20px 20px;
       border-radius: 15px;
       background-color: #1a73e8;
       color: white;
       border: none;
       cursor: pointer;
-      width: 440px;             /* combined width of blue + green buttons */
+      width: 440px;
       display: block;
-      margin: 0 auto 30px auto; /* center under buttons */
+      margin: 0 auto 30px auto;
       text-align: center;
     }
 
-    #uploadBtn:hover {
+    #undoBtn:hover, #uploadBtn:hover {
       transform: scale(1.05);
     }
 
@@ -105,6 +117,9 @@
   <button class="btn over" id="coneOverBtn" onclick="inc('coneOver')">Over (0)</button>
 </div>
 
+<!-- Undo Button -->
+<button id="undoBtn" onclick="undo()">Undo Last</button>
+
 <!-- Upload Button -->
 <button id="uploadBtn" onclick="upload()">Upload to Google Sheets</button>
 
@@ -113,13 +128,15 @@
   let cupUnder = 0;
   let cupWithin = 0;
   let cupOver = 0;
-
   let coneUnder = 0;
   let coneWithin = 0;
   let coneOver = 0;
 
-  // Increment counters and update button text
+  // Keep track of last increment for undo
+  let lastAction = null;
+
   function inc(which) {
+    lastAction = which; // store last increment
     switch(which) {
       case 'cupUnder': cupUnder++; updateButton('cupUnder'); break;
       case 'cupWithin': cupWithin++; updateButton('cupWithin'); break;
@@ -130,7 +147,6 @@
     }
   }
 
-  // Update button label with current count
   function updateButton(which) {
     switch(which) {
       case 'cupUnder':
@@ -148,7 +164,19 @@
     }
   }
 
-  // Upload counters to Google Sheets and reset
+  function undo() {
+    if (!lastAction) return; // nothing to undo
+    switch(lastAction) {
+      case 'cupUnder': if(cupUnder>0) cupUnder--; updateButton('cupUnder'); break;
+      case 'cupWithin': if(cupWithin>0) cupWithin--; updateButton('cupWithin'); break;
+      case 'cupOver': if(cupOver>0) cupOver--; updateButton('cupOver'); break;
+      case 'coneUnder': if(coneUnder>0) coneUnder--; updateButton('coneUnder'); break;
+      case 'coneWithin': if(coneWithin>0) coneWithin--; updateButton('coneWithin'); break;
+      case 'coneOver': if(coneOver>0) coneOver--; updateButton('coneOver'); break;
+    }
+    lastAction = null; // reset after undo
+  }
+
   function upload() {
     fetch("https://script.google.com/macros/s/AKfycby4c2RGAQeJgMnvEDW2PXgTC_gBgp8gVpA-hVYzhM83POruWTDhGoOU_ZgQCNtw-qVXHg/exec", {
       method: "POST",
@@ -165,10 +193,10 @@
     .catch(err => alert("Upload failed: " + err));
   }
 
-  // Reset all counters and update buttons
   function resetCounters() {
     cupUnder = 0; cupWithin = 0; cupOver = 0;
     coneUnder = 0; coneWithin = 0; coneOver = 0;
+    lastAction = null;
 
     updateButton('cupUnder');
     updateButton('cupWithin');
@@ -177,7 +205,6 @@
     updateButton('coneWithin');
     updateButton('coneOver');
   }
-
 </script>
 
 </body>
