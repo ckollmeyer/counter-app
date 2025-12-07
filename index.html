@@ -24,32 +24,32 @@
     h2 {
       font-size: 30px;
       color: #333;
-      margin: 20px 0 10px 0;
+      margin: 20px 0 15px 0;
       text-align: center;
     }
 
     .button-row {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin-bottom: 30px;
-      max-width: 550px;
+      gap: 20px;
+      margin-bottom: 35px; /* slightly more spacing between rows */
       width: 100%;
+      max-width: 550px;
     }
 
     .btn {
       font-size: 24px;
-      padding: 20px;
+      padding: 30px 20px; /* taller buttons */
       flex: 1;
       min-width: 160px;
-      max-width: 180px;
+      max-width: 220px; /* wide enough for blue button */
       border: none;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
       color: white;
       white-space: nowrap;
-      text-align: center; /* ensures text is centered */
+      text-align: center;
     }
 
     .btn:hover {
@@ -60,20 +60,20 @@
     .within { 
       background-color: #99ccff; 
       min-width: 200px; /* wider for blue button */
-      max-width: 220px; 
+      max-width: 220px;
     }
     .over { background-color: #99ff99; }
 
+    /* Upload button matches width of widest button in the row (blue/green) */
     #uploadBtn {
       font-size: 28px;
-      padding: 20px;
+      padding: 25px 20px; /* taller upload button */
       border-radius: 15px;
       background-color: #1a73e8;
       color: white;
       border: none;
       cursor: pointer;
-      width: 100%;
-      max-width: 550px; /* match button rows */
+      width: 220px; /* match blue or green button width */
       display: block;
       margin: 0 auto 30px auto;
       text-align: center;
