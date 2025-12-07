@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Counter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  .count {
+    font-size: 40px;
+    margin: 20px 0;
+  }
+  .btn {
+    font-size: 30px;
+    padding: 20px;
+    width: 80%;
+    margin: 10px auto;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<h1>Category Counter</h1>
+
+<div class="count">Under: <span id="under">0</span></div>
+<button class="btn" onclick="inc('under')">Under +1</button>
+
+<div class="count">Just Right: <span id="jr">0</span></div>
+<button class="btn" onclick="inc('jr')">Just Right +1</button>
+
+<div class="count">Over: <span id="over">0</span></div>
+<button class="btn" onclick="inc('over')">Over +1</button>
+
+<hr>
+
+<button class="btn" onclick="upload()">Upload to Google Sheets</button>
+
+<script>
+let under = 0;
+let jr = 0;
+let over = 0;
+
+function inc(which) {
+  if (which === "under") under++;
+  if (which === "jr") jr++;
+  if (which === "over") over++;
+
+  document.getElementById("under").innerText = under;
+  document.getElementById("jr").innerText = jr;
+  document.getElementById("over").innerText = over;
+}
+
+function upload() {
+  fetch("https://script.google.com/macros/s/AKfycby4c2RGAQeJgMnvEDW2PXgTC_gBgp8gVpA-hVYzhM83POruWTDhGoOU_ZgQCNtw-qVXHg/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      under: under,
+      jr: jr,
+      over: over
+    })
+  }).then(() => alert("Uploaded!"));
+}
+</script>
+
+</body>
+</html>
