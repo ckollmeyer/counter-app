@@ -62,7 +62,7 @@
     }
     .over { background-color: #99ff99; }
 
-    /* Undo button width = combined width of blue + green buttons */
+    /* Undo button = combined width of blue + green */
     #undoBtn {
       font-size: 28px;
       padding: 20px 20px;
@@ -71,7 +71,7 @@
       color: white;
       border: none;
       cursor: pointer;
-      width: 440px;
+      width: 440px; /* blue + green combined */
       display: block;
       margin: 0 auto 15px auto;
       text-align: center;
@@ -85,7 +85,7 @@
       color: white;
       border: none;
       cursor: pointer;
-      width: 440px;
+      width: 440px; /* blue + green combined */
       display: block;
       margin: 0 auto 30px auto;
       text-align: center;
@@ -118,7 +118,7 @@
 </div>
 
 <!-- Undo Button -->
-<button id="undoBtn" onclick="undo()">Undo Last</button>
+<button id="undoBtn" onclick="undo()">Undo</button>
 
 <!-- Upload Button -->
 <button id="uploadBtn" onclick="upload()">Upload to Google Sheets</button>
@@ -132,21 +132,26 @@
   let coneWithin = 0;
   let coneOver = 0;
 
-  // Keep track of last increment for undo
-  let lastAction = null;
+  // Action history for multi-step undo
+  let actionHistory = [];
 
+  // Increment button
   function inc(which) {
-    lastAction = which; // store last increment
+    actionHistory.push(which); // record the action
+
     switch(which) {
-      case 'cupUnder': cupUnder++; updateButton('cupUnder'); break;
-      case 'cupWithin': cupWithin++; updateButton('cupWithin'); break;
-      case 'cupOver': cupOver++; updateButton('cupOver'); break;
-      case 'coneUnder': coneUnder++; updateButton('coneUnder'); break;
-      case 'coneWithin': coneWithin++; updateButton('coneWithin'); break;
-      case 'coneOver': coneOver++; updateButton('coneOver'); break;
+      case 'cupUnder': cupUnder++; break;
+      case 'cupWithin': cupWithin++; break;
+      case 'cupOver': cupOver++; break;
+      case 'coneUnder': coneUnder++; break;
+      case 'coneWithin': coneWithin++; break;
+      case 'coneOver': coneOver++; break;
     }
+
+    updateButton(which);
   }
 
+  // Update button label with current count
   function updateButton(which) {
     switch(which) {
       case 'cupUnder':
@@ -164,19 +169,25 @@
     }
   }
 
+  // Multi-step Undo
   function undo() {
-    if (!lastAction) return; // nothing to undo
+    if (actionHistory.length === 0) return; // nothing to undo
+
+    const lastAction = actionHistory.pop();
+
     switch(lastAction) {
-      case 'cupUnder': if(cupUnder>0) cupUnder--; updateButton('cupUnder'); break;
-      case 'cupWithin': if(cupWithin>0) cupWithin--; updateButton('cupWithin'); break;
-      case 'cupOver': if(cupOver>0) cupOver--; updateButton('cupOver'); break;
-      case 'coneUnder': if(coneUnder>0) coneUnder--; updateButton('coneUnder'); break;
-      case 'coneWithin': if(coneWithin>0) coneWithin--; updateButton('coneWithin'); break;
-      case 'coneOver': if(coneOver>0) coneOver--; updateButton('coneOver'); break;
+      case 'cupUnder': if(cupUnder>0) cupUnder--; break;
+      case 'cupWithin': if(cupWithin>0) cupWithin--; break;
+      case 'cupOver': if(cupOver>0) cupOver--; break;
+      case 'coneUnder': if(coneUnder>0) coneUnder--; break;
+      case 'coneWithin': if(coneWithin>0) coneWithin--; break;
+      case 'coneOver': if(coneOver>0) coneOver--; break;
     }
-    lastAction = null; // reset after undo
+
+    updateButton(lastAction);
   }
 
+  // Upload to Google Sheets
   function upload() {
     fetch("https://script.google.com/macros/s/AKfycby4c2RGAQeJgMnvEDW2PXgTC_gBgp8gVpA-hVYzhM83POruWTDhGoOU_ZgQCNtw-qVXHg/exec", {
       method: "POST",
@@ -193,10 +204,11 @@
     .catch(err => alert("Upload failed: " + err));
   }
 
+  // Reset all counters and action history
   function resetCounters() {
     cupUnder = 0; cupWithin = 0; cupOver = 0;
     coneUnder = 0; coneWithin = 0; coneOver = 0;
-    lastAction = null;
+    actionHistory = [];
 
     updateButton('cupUnder');
     updateButton('cupWithin');
