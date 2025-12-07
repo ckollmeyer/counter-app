@@ -50,50 +50,29 @@
       text-align: center;
     }
 
-    .btn:hover {
-      transform: scale(1.05);
-    }
+    .btn:hover { transform: scale(1.05); }
 
     .under { background-color: #ff9999; }
-    .within { 
-      background-color: #99ccff; 
-      min-width: 200px;
-      max-width: 220px;
-    }
+    .within { background-color: #99ccff; min-width: 200px; max-width: 220px; }
     .over { background-color: #99ff99; }
 
-    /* Undo button = combined width of blue + green */
-    #undoBtn {
+    #undoBtn, #uploadBtn {
       font-size: 28px;
       padding: 20px 20px;
       border-radius: 15px;
-      background-color: #ff6f61; /* red-ish for undo */
-      color: white;
       border: none;
       cursor: pointer;
-      width: 440px; /* blue + green combined */
+      width: 440px; /* width = blue + green combined */
       display: block;
       margin: 0 auto 15px auto;
       text-align: center;
-    }
-
-    #uploadBtn {
-      font-size: 28px;
-      padding: 20px 20px;
-      border-radius: 15px;
-      background-color: #1a73e8;
       color: white;
-      border: none;
-      cursor: pointer;
-      width: 440px; /* blue + green combined */
-      display: block;
-      margin: 0 auto 30px auto;
-      text-align: center;
     }
 
-    #undoBtn:hover, #uploadBtn:hover {
-      transform: scale(1.05);
-    }
+    #undoBtn { background-color: #ff6f61; margin-bottom: 15px; }
+    #uploadBtn { background-color: #1a73e8; margin-bottom: 30px; }
+
+    #undoBtn:hover, #uploadBtn:hover { transform: scale(1.05); }
 
   </style>
 </head>
@@ -101,7 +80,6 @@
 
 <h1>Ice Dream Weights</h1>
 
-<!-- Cup Section -->
 <h2>Cup 4.3 oz</h2>
 <div class="button-row">
   <button class="btn under" id="cupUnderBtn" onclick="inc('cupUnder')">Under (0)</button>
@@ -109,7 +87,6 @@
   <button class="btn over" id="cupOverBtn" onclick="inc('cupOver')">Over (0)</button>
 </div>
 
-<!-- Cone Section -->
 <h2>Cone 4.5 oz</h2>
 <div class="button-row">
   <button class="btn under" id="coneUnderBtn" onclick="inc('coneUnder')">Under (0)</button>
@@ -117,29 +94,17 @@
   <button class="btn over" id="coneOverBtn" onclick="inc('coneOver')">Over (0)</button>
 </div>
 
-<!-- Undo Button -->
 <button id="undoBtn" onclick="undo()">Undo</button>
-
-<!-- Upload Button -->
-<button id="uploadBtn" onclick="upload()">Upload to Google Sheets</button>
+<button id="uploadBtn" onclick="upload()">Upload to Google Form</button>
 
 <script>
   // Counters
-  let cupUnder = 0;
-  let cupWithin = 0;
-  let cupOver = 0;
-  let coneUnder = 0;
-  let coneWithin = 0;
-  let coneOver = 0;
+  let cupUnder=0, cupWithin=0, cupOver=0, coneUnder=0, coneWithin=0, coneOver=0;
+  let actionHistory=[];
 
-  // Action history for multi-step undo
-  let actionHistory = [];
-
-  // Increment button
-  function inc(which) {
-    actionHistory.push(which); // record the action
-
-    switch(which) {
+  function inc(which){
+    actionHistory.push(which);
+    switch(which){
       case 'cupUnder': cupUnder++; break;
       case 'cupWithin': cupWithin++; break;
       case 'cupOver': cupOver++; break;
@@ -147,35 +112,24 @@
       case 'coneWithin': coneWithin++; break;
       case 'coneOver': coneOver++; break;
     }
-
     updateButton(which);
   }
 
-  // Update button label with current count
-  function updateButton(which) {
-    switch(which) {
-      case 'cupUnder':
-        document.getElementById('cupUnderBtn').innerText = `Under (${cupUnder})`; break;
-      case 'cupWithin':
-        document.getElementById('cupWithinBtn').innerText = `Within ±0.5 (${cupWithin})`; break;
-      case 'cupOver':
-        document.getElementById('cupOverBtn').innerText = `Over (${cupOver})`; break;
-      case 'coneUnder':
-        document.getElementById('coneUnderBtn').innerText = `Under (${coneUnder})`; break;
-      case 'coneWithin':
-        document.getElementById('coneWithinBtn').innerText = `Within ±0.5 (${coneWithin})`; break;
-      case 'coneOver':
-        document.getElementById('coneOverBtn').innerText = `Over (${coneOver})`; break;
+  function updateButton(which){
+    switch(which){
+      case 'cupUnder': document.getElementById('cupUnderBtn').innerText=`Under (${cupUnder})`; break;
+      case 'cupWithin': document.getElementById('cupWithinBtn').innerText=`Within ±0.5 (${cupWithin})`; break;
+      case 'cupOver': document.getElementById('cupOverBtn').innerText=`Over (${cupOver})`; break;
+      case 'coneUnder': document.getElementById('coneUnderBtn').innerText=`Under (${coneUnder})`; break;
+      case 'coneWithin': document.getElementById('coneWithinBtn').innerText=`Within ±0.5 (${coneWithin})`; break;
+      case 'coneOver': document.getElementById('coneOverBtn').innerText=`Over (${coneOver})`; break;
     }
   }
 
-  // Multi-step Undo
-  function undo() {
-    if (actionHistory.length === 0) return; // nothing to undo
-
-    const lastAction = actionHistory.pop();
-
-    switch(lastAction) {
+  function undo(){
+    if(actionHistory.length===0) return;
+    const last=actionHistory.pop();
+    switch(last){
       case 'cupUnder': if(cupUnder>0) cupUnder--; break;
       case 'cupWithin': if(cupWithin>0) cupWithin--; break;
       case 'cupOver': if(cupOver>0) cupOver--; break;
@@ -183,39 +137,31 @@
       case 'coneWithin': if(coneWithin>0) coneWithin--; break;
       case 'coneOver': if(coneOver>0) coneOver--; break;
     }
-
-    updateButton(lastAction);
+    updateButton(last);
   }
 
-  // Upload to Google Sheets
-  function upload() {
-    fetch("https://script.google.com/macros/s/AKfycbyMYjrpfedC0hW7ePcmiaO8w08FtBXSPngqgMkcf8Q0qdd-mGFRV7U-eyioGaAt1Nb6LQ/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cupUnder, cupWithin, cupOver,
-        coneUnder, coneWithin, coneOver
-      })
-    })
-    .then(() => {
-      alert("Uploaded to Google Sheets!");
-      resetCounters();
-    })
-    .catch(err => alert("Upload failed: " + err));
+  function upload(){
+    // Replace with your Google Form pre-filled URL IDs
+    const formUrl="https://docs.google.com/forms/d/e/1FAIpQLSfd4DmpsOQr-1N9411Ya9a49G2BAWdZuEAD8pVjo0RvN_aLww/viewform?usp=pp_url&entry.900320374=0&entry.677037870=0&entry.592558042=0&entry.3134040=0&entry.36772903=0&entry.989635515=0";
+    const data=new URLSearchParams();
+
+    data.append("entry.900320374", cupUnder);   // Cup Under
+    data.append("entry.677037870", cupWithin);  // Cup Within
+    data.append("entry.592558042", cupOver);    // Cup Over
+    data.append("entry.3134040", coneUnder);  // Cone Under
+    data.append("entry.36772903", coneWithin); // Cone Within
+    data.append("entry.989635515", coneOver);   // Cone Over
+
+    fetch(formUrl, { method:"POST", mode:"no-cors", body:data })
+      .then(()=>{ alert("Uploaded to Google Form!"); resetCounters(); })
+      .catch(err=>alert("Upload failed: "+err));
   }
 
-  // Reset all counters and action history
-  function resetCounters() {
-    cupUnder = 0; cupWithin = 0; cupOver = 0;
-    coneUnder = 0; coneWithin = 0; coneOver = 0;
-    actionHistory = [];
-
-    updateButton('cupUnder');
-    updateButton('cupWithin');
-    updateButton('cupOver');
-    updateButton('coneUnder');
-    updateButton('coneWithin');
-    updateButton('coneOver');
+  function resetCounters(){
+    cupUnder=0; cupWithin=0; cupOver=0;
+    coneUnder=0; coneWithin=0; coneOver=0;
+    actionHistory=[];
+    ['cupUnder','cupWithin','cupOver','coneUnder','coneWithin','coneOver'].forEach(updateButton);
   }
 </script>
 
